@@ -1,0 +1,23 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <title>Backbone + RequireJS + Bootstrap</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript">
+            var App = App || {};
+            App.root = "/jsframe";
+        </script>
+        <!-- Load the script "js/main.js" as our entry point -->
+        <script data-main="public/js/main" src="public/js/libs/require/require.js"></script>
+    </head>
+    <body>
+        <div id="container">
+            <div id="menu"><a href="#index">Index<a></div>
+            <div id="content"></div>
+        </div>
+    </body>
+</html>
