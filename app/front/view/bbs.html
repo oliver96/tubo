@@ -1,0 +1,53 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <title>Backbone + RequireJS + Bootstrap</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="public/css/bootstrap.css">
+        <link rel="stylesheet" href="public/css/offcanvas.css">
+        <script type="text/javascript">
+            var App = App || {};
+            App.root = "/jsframe";
+        </script>
+        <!--[if lte IE 8]>
+        <script type="text/javascript" src="public/js/respond.js"></script>
+        <![endif]-->
+        <!-- Load the script "js/main.js" as our entry point -->
+        <script data-main="public/js/main" src="public/js/libs/require/require.js"></script>
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top navbar-inverse">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="">金山角</a>
+                </div>
+                <div class="pull-right collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="news.html">新闻</a></li>
+                        <li><a href="blog.html">博客</a></li>
+                        <li class="active"><a href="bbs.html">论坛</a></li>
+                        <li><a href="photos.html">图片</a></li>
+                        <!--
+                        <li><a href="#">房产</a></li>
+                        <li><a href="#">汽车</a></li>
+                        <li><a href="#">旅游</a></li>
+                        <li><a href="#">美食</a></li>
+                        -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="container" class="container">
+            
+            <hr />
+            <footer>
+                <p>&copy; Conner of King Hill Inc. 2013</p>
+            </footer>
+        </div>
+    </body>
+</html>
