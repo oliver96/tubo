@@ -78,6 +78,9 @@ class HttpClient {
         $response = array();
         $isHeader = false;
         $isBody = false;
+        $isChunked = false;
+        $isChunkBody = false;
+        $chunkSize = 0;
         while(!feof($this->fps[$host])) {
             $ch = fgetc($this->fps[$host]);
             if(false == $isBody) {
@@ -104,6 +107,9 @@ class HttpClient {
                                 case 'content-length' : 
                                     $this->contentLength = intval($value);
                                 break;
+                                case 'transfer-encoding' : 
+                                    $isChunked = $value == 'chunked' ? true : false;
+                                break;
                             }
                         }
                     }
@@ -113,14 +119,40 @@ class HttpClient {
                 $lastCh = $ch;
             }
             else {
-                if($this->contentLength <= 0) {
-                    break;
+                if(true == $isChunked) {
+                    if("\r" == $lastCh && "\n" == $ch) {
+                        if($content) echo gzdecode($content);
+                        $chunkSize = (integer)hexdec(trim($buf));
+                        echo " chunk size: |" . $chunkSize . "|\r\n\r\n";
+                        if($chunkSize == 0) break;
+                        $isChunkBody = true;
+                        $buf = '';
+                    }
+                    else if(true == $isChunkBody) {
+                        if($chunkSize <= 0) {
+                            $isChunkBody = false;
+                            continue;
+                        }
+                        $content .= $ch;
+                        $chunkSize --;
+                    }
+                    else {
+                        $buf .= $ch;
+                        $lastCh = $ch;
+                    }
                 }
-                $content .= $ch;
-                $this->contentLength --;
+                else {
+                    if($this->contentLength <= 0) {
+                        break;
+                    }
+                    $content .= $ch;
+                    $this->contentLength --;
+                }
             }
         }
+        print_r($this->resHeaders);
         if('gzip' == $this->resHeaders['Content-Encoding']) {
+            //echo $content;
             $content = gzdecode($content);
         }
         
