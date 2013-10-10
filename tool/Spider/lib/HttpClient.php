@@ -4,30 +4,34 @@ class HttpClient {
     private $url = '';
     private $urlAry = array();
     private $timeout = 30;
-    private $reqHeaders = array(
-        'Cache-Control' => 'max-age=0',
-        'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.66 Safari/537.36',
-        'Accept-Encoding' => 'gzip,deflate,sdch',
-        'Accept-Language' => 'zh-CN,zh;q=0.8',
-        'Connection' => 'keep-alive'
-    );
+    private $reqHeaders = array();
     private $resHeaders = array();
     private $cookies = array();
     private $fps = array();
-    private $contentLength = 0;
 
     public function HttpClient($timeout = 30) {
         $this->timeout = $timeout;
     }
     
     public function setHeader($head, $value) {
-        if(!isset($this->reqHeaders[$head])) {
+        //if(!isset($this->reqHeaders[$head])) {
             $this->reqHeaders[$head] = $value;
-        }
+        //}
+    }
+    
+    private function initHeaders() {
+        $this->reqHeaders = array(
+            'Cache-Control' => 'max-age=0',
+            'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.66 Safari/537.36',
+            'Accept-Encoding' => 'gzip,deflate,sdch',
+            'Accept-Language' => 'zh-CN,zh;q=0.8',
+            'Connection' => 'keep-alive'
+        );
     }
 
     public function get($url) {
+        $this->initHeaders();
         $content = '';
         $urlAry = $this->parseUrl($url);
         if(!empty($urlAry)) {
@@ -63,6 +67,32 @@ class HttpClient {
         
         $this->setHeader('Host', $host);
         $path = isset($this->urlAry['path']) ? $this->urlAry['path'] : '/';
+        if(isset($this->cookies[$host])) {
+            foreach($this->cookies[$host] as $cookie) {
+                $expires = '';
+                if(isset($cookie['expires'])) {
+                    $expires = $cookie['expires'];
+                    unset($cookie['expires']);
+                }
+                $path = '/';
+                if(isset($cookie['path'])) {
+                    $path = $cookie['path'];
+                    unset($cookie['path']);
+                }
+                $domain = '';
+                if(isset($cookie['domain'])) {
+                    $domain = $cookie['domain'];
+                    unset($cookie['domain']);
+                }
+                if(!empty($cookie)) {
+                    $tmpCookies = array();
+                    foreach($cookie as $name => $value) {
+                        $tmpCookies[] = sprintf("%s=%s", $name, $value);
+                    }
+                    $this->setHeader('Cookie', implode('; ', $tmpCookies));
+                }
+            }
+        }
 
         $reqHeader = sprintf("GET %s %s \r\n", $path, $this->version);
         if(!empty($this->reqHeaders)) {
@@ -70,9 +100,10 @@ class HttpClient {
                 $reqHeader .= sprintf("%s: %s\r\n", $head, $value);
             }
         }
+        echo $reqHeader . "\r\n";
         
         fwrite($this->fps[$host], $reqHeader . "\r\n");
-
+        $cache = '';
         $buf = '';
         $lastCh = '';
         $response = array();
@@ -81,9 +112,10 @@ class HttpClient {
         $isChunked = false;
         $isChunkBody = false;
         $chunkSize = 0;
+        $cotentLength = 0;
         while(!feof($this->fps[$host])) {
-            $ch = fgetc($this->fps[$host]);
             if(false == $isBody) {
+                $ch = fgetc($this->fps[$host]);
                 $buf .= "\r" == $ch || "\n" == $ch ? '' : $ch;
                 if("\r" == $lastCh && "\n" == $ch) {
                     if(false == $isHeader) { // response line
@@ -105,10 +137,26 @@ class HttpClient {
                             $this->resHeaders[$head] = $value;
                             switch(strtolower($head)) {
                                 case 'content-length' : 
-                                    $this->contentLength = intval($value);
+                                    $contentLength = intval($value);
                                 break;
                                 case 'transfer-encoding' : 
                                     $isChunked = $value == 'chunked' ? true : false;
+                                break;
+                                case 'set-cookie' :
+                                    $cookieValues = explode(';', $value);
+                                    if(!empty($cookieValues)) {
+                                        if(isset($this->cookies[$host])) {
+                                            $this->cookies[$host] = array();
+                                        }
+                                        $cookie = array();
+                                        foreach($cookieValues as $cookieValue) {
+                                            $pos = strpos($cookieValue, '=');
+                                            $cname = trim(substr($cookieValue, 0, $pos));
+                                            $cvalue = trim(substr($cookieValue, $pos + 1));
+                                            $cookie[$cname] = $cvalue;
+                                        }
+                                        $this->cookies[$host][] = $cookie;
+                                    }
                                 break;
                             }
                         }
@@ -120,43 +168,55 @@ class HttpClient {
             }
             else {
                 if(true == $isChunked) {
-                    if("\r" == $lastCh && "\n" == $ch) {
-                        if($content) echo gzdecode($content);
-                        $chunkSize = (integer)hexdec(trim($buf));
-                        echo " chunk size: |" . $chunkSize . "|\r\n\r\n";
-                        if($chunkSize == 0) break;
-                        $isChunkBody = true;
-                        $buf = '';
-                    }
-                    else if(true == $isChunkBody) {
-                        if($chunkSize <= 0) {
-                            $isChunkBody = false;
-                            continue;
+                    if(false == $isChunkBody) {
+                        $ch = fgetc($this->fps[$host]);
+                        $buf .= "\r" == $ch || "\n" == $ch ? '' : $ch;
+                        if("\r" == $lastCh && "\n" == $ch) {
+                            $chunkSize = (integer)hexdec(trim($buf));
+                            if($chunkSize <= 0) {
+                                fseek($this->fps[$host], 2, SEEK_CUR);
+                                break;
+                            }
+                            $isChunkBody = true;
+                            $buf = '';
                         }
-                        $content .= $ch;
+                        $lastCh = $ch;
+                    }
+                    else if($chunkSize > 0) {
+                        $content .= fgetc($this->fps[$host]);
                         $chunkSize --;
                     }
                     else {
-                        $buf .= $ch;
-                        $lastCh = $ch;
+                        fseek($this->fps[$host], 2, SEEK_CUR);
+                        $isChunkBody = false;
                     }
                 }
                 else {
-                    if($this->contentLength <= 0) {
+                    if($contentLength > 0) {
+                        $content .= fgetc($this->fps[$host]);
+                        $contentLength --;
+                    }
+                    else {
+                        fseek($this->fps[$host], 2, SEEK_CUR);
                         break;
                     }
-                    $content .= $ch;
-                    $this->contentLength --;
                 }
             }
         }
-        print_r($this->resHeaders);
+        
         if('gzip' == $this->resHeaders['Content-Encoding']) {
-            //echo $content;
             $content = gzdecode($content);
         }
         
         return $content;
+    }
+    
+    public function getHeaders() {
+        return $this->resHeaders;
+    }
+    
+    public function getCookies() {
+        return $this->cookies;
     }
 }
 ?>
