@@ -1,0 +1,60 @@
+Load http://wei.sohu.com/roll/
+GET /roll/ HTTP/1.1 
+Cache-Control: max-age=0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.66 Safari/537.36
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: zh-CN,zh;q=0.8
+Connection: keep-alive
+Host: wei.sohu.com
+
+Array
+(
+    [Content-Type] => text/html
+    [Content-Length] => 4624
+    [Connection] => keep-alive
+    [Date] => Fri, 11 Oct 2013 09:37:03 GMT
+    [Server] => SWS
+    [Vary] => Accept-Encoding
+    [Cache-Control] => max-age=120
+    [Expires] => Fri, 11 Oct 2013 09:39:03 GMT
+    [Last-Modified] => Fri, 11 Oct 2013 09:12:43 GMT
+    [Content-Encoding] => gzip
+    [FSS-Cache] => EXPIRED from 31720084.39781204.42753039
+)
+GET /20131011/n387981092.shtml HTTP/1.1 
+Cache-Control: max-age=0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.66 Safari/537.36
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: zh-CN,zh;q=0.8
+Connection: keep-alive
+Host: wei.sohu.com
+
+Array
+(
+    [Content-Type] => text/html
+    [Content-Length] => 21350
+    [Connection] => keep-alive
+    [Date] => Fri, 11 Oct 2013 09:35:35 GMT
+    [Server] => SWS
+    [Vary] => Accept-Encoding
+    [Cache-Control] => max-age=120
+    [Expires] => Fri, 11 Oct 2013 09:37:35 GMT
+    [Last-Modified] => Fri, 11 Oct 2013 09:22:22 GMT
+    [Content-Encoding] => gzip
+    [FSS-Cache] => EXPIRED from 30540418.37421890.41573355
+)
+Array
+(
+    [0] => <div itemprop="articleBody"><p>　　2013年10月9日，广西壮族自治区那坡县人民法院审结了一起新娘新婚之夜上错床与陪郎发生关系后告其强奸的刑事自诉案，判决陪郎无罪。</p>
+<p>　　2013年8月30日，伍某与黄某举行婚礼，阮某为陪郎，当晚阮某住在伍某家。因乡下条件所限，一家只设一个公共卫生间，房间也只用门帘挂起，不设木门。大约凌晨2时许，黄某内急如厕回来误入阮某的房间上床与阮某同眠。黄某用手抚摸阮某的身体，阮某在睡梦中被摸得性欲大起，便翻身将黄某抱住，发生了性关系后，两人甜蜜入睡。“快来人啊，有人强奸！”天蒙蒙亮时，阮某突然被女人的尖叫声惊醒。闻讯赶来的伍某及家人将阮某团团围住，大家认为家丑不可外扬，要阮某赔20000元私了。而阮某认为自己没有错，也没有钱。黄某与丈夫遂向派出所报案。民警赶来了解事情的前因后果后，认为不是强奸，不立案。黄某与丈夫吞不下这口气，将伍某告上了法院。</p>
+<p>　　法院经审理查明事实后认为，阮某在自己所睡的床上与黄某发生性关系，主要是黄某半夜如厕归来进错房间上错床后，误认为阮某是其丈夫，就主动抚摸，导致与阮某发生了性关系。虽然这个行为明显属黄某错认对象，但黄某的行为是属自愿的、主动的，不存在任何抗拒或反抗的行为，不属强奸的因素。黄某对自己的行为结果，应自行承担责任。而由于黄某的这个过错，使得阮某未使用暴力、胁迫或其他手段就自然而然地与她发生了性关系，也不是阮某冒充伍某将黄某骗奸。因此，阮某的行为，虽然存在一定的过错，属于违反道德伦理的行为，但不构成强奸罪。遂作出前述判决。(记者莫小松 见习记者马艳 通讯员林荣先)</p><script type="text/javascript">// <![CDATA[
+media_span_url('http://www.chinanews.com/fz/2013/10-11/5363135.shtml')
+//]]></script></div>
+    [1] => <p>　　2013年10月9日，广西壮族自治区那坡县人民法院审结了一起新娘新婚之夜上错床与陪郎发生关系后告其强奸的刑事自诉案，判决陪郎无罪。</p>
+<p>　　2013年8月30日，伍某与黄某举行婚礼，阮某为陪郎，当晚阮某住在伍某家。因乡下条件所限，一家只设一个公共卫生间，房间也只用门帘挂起，不设木门。大约凌晨2时许，黄某内急如厕回来误入阮某的房间上床与阮某同眠。黄某用手抚摸阮某的身体，阮某在睡梦中被摸得性欲大起，便翻身将黄某抱住，发生了性关系后，两人甜蜜入睡。“快来人啊，有人强奸！”天蒙蒙亮时，阮某突然被女人的尖叫声惊醒。闻讯赶来的伍某及家人将阮某团团围住，大家认为家丑不可外扬，要阮某赔20000元私了。而阮某认为自己没有错，也没有钱。黄某与丈夫遂向派出所报案。民警赶来了解事情的前因后果后，认为不是强奸，不立案。黄某与丈夫吞不下这口气，将伍某告上了法院。</p>
+<p>　　法院经审理查明事实后认为，阮某在自己所睡的床上与黄某发生性关系，主要是黄某半夜如厕归来进错房间上错床后，误认为阮某是其丈夫，就主动抚摸，导致与阮某发生了性关系。虽然这个行为明显属黄某错认对象，但黄某的行为是属自愿的、主动的，不存在任何抗拒或反抗的行为，不属强奸的因素。黄某对自己的行为结果，应自行承担责任。而由于黄某的这个过错，使得阮某未使用暴力、胁迫或其他手段就自然而然地与她发生了性关系，也不是阮某冒充伍某将黄某骗奸。因此，阮某的行为，虽然存在一定的过错，属于违反道德伦理的行为，但不构成强奸罪。遂作出前述判决。(记者莫小松 见习记者马艳 通讯员林荣先)</p><script type="text/javascript">// <![CDATA[
+media_span_url('http://www.chinanews.com/fz/2013/10-11/5363135.shtml')
+//]]></script>
+)
