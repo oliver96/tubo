@@ -113,6 +113,7 @@ class HttpClient {
         $isChunkBody = false;
         $chunkSize = 0;
         $cotentLength = 0;
+        $this->resHeaders = array();
         while(!feof($this->fps[$host])) {
             if(false == $isBody) {
                 $ch = fgetc($this->fps[$host]);
@@ -125,6 +126,7 @@ class HttpClient {
                     else { // reponse header
                         if('' == $buf) {
                             $isBody = true;
+                            print_r($this->resHeaders);
                             if(320 == $httpStatus) {
                                 $content = $this->get($this->resHeaders['Location']);
                                 break;
@@ -173,6 +175,7 @@ class HttpClient {
                         $buf .= "\r" == $ch || "\n" == $ch ? '' : $ch;
                         if("\r" == $lastCh && "\n" == $ch) {
                             $chunkSize = (integer)hexdec(trim($buf));
+                            echo $chunkSize . "\r\n";
                             if($chunkSize <= 0) {
                                 fseek($this->fps[$host], 2, SEEK_CUR);
                                 break;
@@ -197,17 +200,21 @@ class HttpClient {
                         $contentLength --;
                     }
                     else {
-                        fseek($this->fps[$host], 2, SEEK_CUR);
+                        //fseek($this->fps[$host], 2, SEEK_CUR);
                         break;
                     }
                 }
             }
         }
         
-        if('gzip' == $this->resHeaders['Content-Encoding']) {
+        if(isset($this->resHeaders['Content-Encoding']) 
+            && 'gzip' == $this->resHeaders['Content-Encoding']) {
             $content = gzdecode($content);
         }
-        
+        if(isset($this->resHeaders['Connection'])
+            && 'close' == $this->resHeaders['Connection']) {
+            fclose($this->fps[$host]);
+        }
         return $content;
     }
     
